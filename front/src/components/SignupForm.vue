@@ -12,43 +12,56 @@
         </div>
         <button type="submit">S'inscrire</button>
       </form>
+      <button @click="logout">Déconnexion</button>
     </div>
   </template>
-  
   <script>
+  import axios from 'axios';
+  
   export default {
     data() {
       return {
         username: '',
-        password: ''
+        password: '',
+        isLoggedIn: false // Ajout de la propriété isLoggedIn
       };
+    },
+    created() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.isLoggedIn = true; // Mettre à jour l'état de connexion si le token existe
+      }
     },
     methods: {
       register() {
-        // Effectuer une requête POST vers votre API pour l'inscription sécurisée
-        // Utilisez axios ou la méthode fetch pour effectuer la requête HTTP
-        
         const registerData = {
           username: this.username,
           password: this.password
         };
-        
-        // Envoyez les données d'inscription à votre API via une connexion sécurisée (HTTPS)
-        // axios.post('https://votre-domaine.com/register', registerData, { withCredentials: true })
-        //   .then(response => {
-        //     // Gérer la réponse de l'API
-        //     // Rediriger vers la page de connexion ou afficher un message de succès
-        //   })
-        //   .catch(error => {
-        //     // Gérer les erreurs d'inscription
-        //   });
-        
-        console.log('Inscription sécurisée avec :', registerData);
-        
-        // Exemple de redirection vers la page de connexion après l'inscription
-        this.$router.push('/login');
+  
+        console.log('Données d\'inscription:', registerData);
+  
+        axios.post('http://localhost:3000/users/register', registerData, { withCredentials: true })
+          .then(response => {
+            const token = response.data.token;
+            localStorage.setItem('token', token); // Stocker le token dans localStorage
+            this.isLoggedIn = true; // Mettre à jour l'état de connexion
+            // Rediriger vers la page de connexion après une inscription réussie
+          })
+          .catch(error => {
+            console.error('Erreur d\'inscription:', error);
+            // Gérer les erreurs d'inscription
+          });
+      },
+      logout() {
+        // Effectuer une requête au backend pour déconnecter l'utilisateur
+        // Supprimer le token du stockage local
+        // Réinitialiser les données de connexion
+        localStorage.removeItem('token');
+        this.isLoggedIn = false;
+        this.username = '';
+        this.password = '';
       }
     }
   };
   </script>
-  

@@ -12,41 +12,56 @@
       </div>
       <button type="submit">Se connecter</button>
     </form>
+    <button @click="logout">Déconnexion</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      isLoggedIn: false // Ajout de la propriété isLoggedIn
     };
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.isLoggedIn = true; // Mettre à jour l'état de connexion si le token existe
+    }
   },
   methods: {
     login() {
-      // Effectuer une requête POST vers votre API pour la connexion sécurisée
-      // Utilisez axios ou la méthode fetch pour effectuer la requête HTTP
-      
       const loginData = {
         username: this.username,
         password: this.password
       };
-      
-      // Envoyez les données de connexion à votre API via une connexion sécurisée (HTTPS)
-      // axios.post('https://votre-domaine.com/login', loginData, { withCredentials: true })
-      //   .then(response => {
-      //     // Gérer la réponse de l'API
-      //     // Rediriger vers la page d'accueil ou afficher les composants TaskList et AssignedTasksList
-      //   })
-      //   .catch(error => {
-      //     // Gérer les erreurs de connexion
-      //   });
-      
-      console.log('Connexion sécurisée avec :', loginData);
-      
-      // Exemple de redirection vers la page d'accueil
-      this.$router.push('/');
+
+      console.log('Données de connexion:', loginData);
+
+      axios.post('http://localhost:3000/users/login', loginData, { withCredentials: true })
+        .then(response => {
+          const token = response.data.token;
+          localStorage.setItem('token', token); // Stocker le token dans localStorage
+          this.isLoggedIn = true; // Mettre à jour l'état de connexion
+          // Rediriger vers la page d'accueil après la connexion réussie
+        })
+        .catch(error => {
+          console.error('Erreur de connexion:', error);
+          // Gérer les erreurs de connexion
+        });
+    },
+    logout() {
+      // Effectuer une requête au backend pour déconnecter l'utilisateur
+      // Supprimer le token du stockage local
+      // Réinitialiser les données de connexion
+      localStorage.removeItem('token');
+      this.isLoggedIn = false;
+      this.username = '';
+      this.password = '';
     }
   }
 };
