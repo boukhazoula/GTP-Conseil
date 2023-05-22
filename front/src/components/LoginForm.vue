@@ -55,14 +55,21 @@ export default {
         });
     },
     logout() {
-      // Effectuer une requête au backend pour déconnecter l'utilisateur
-      // Supprimer le token du stockage local
-      // Réinitialiser les données de connexion
+  axios.post('http://localhost:3000/users/logout', null, { withCredentials: true })
+    .then(response => {
+      // Réinitialiser les données de connexion après une déconnexion réussie
       localStorage.removeItem('token');
       this.isLoggedIn = false;
       this.username = '';
       this.password = '';
-    }
+      // Rediriger vers la page de connexion ou une autre page appropriée
+    })
+    .catch(error => {
+      console.error('Erreur de déconnexion:', error);
+      // Gérer les erreurs de déconnexion
+    });
+}
+
   }
 };
 </script>

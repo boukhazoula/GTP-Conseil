@@ -56,6 +56,17 @@ export default {
       showAssignedTasksList: false
     };
   },
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Vérifier si un jeton est présent dans le stockage local
+      this.isLoggedIn = true;
+      this.showTaskForm = true;
+      this.showTaskList = true;
+      this.showAssignTasks = true;
+      this.showAssignedTasksList = true;
+    }
+  },
   methods: {
     handleSubmit() {
       if (this.isRegistering) {
@@ -64,10 +75,15 @@ export default {
           password: this.password
         };
 
+        console.log('Données d\'inscription:', registerData);
+
         axios.post('http://localhost:3000/users/register', registerData, { withCredentials: true })
           .then(response => {
             console.log('Réponse d\'inscription:', response.data);
-            this.isLoggedIn = true;
+            const token = response.data.token;
+            localStorage.setItem('token', token); // Stocker le jeton dans le localStorage
+            console.log('Jeton JWT reçu et stocké:', token); // Console de débogage
+            this.isLoggedIn = true; // Mettre à jour l'état de connexion
             this.showTaskForm = true;
             this.showTaskList = true;
             this.showAssignTasks = true;
@@ -83,9 +99,14 @@ export default {
           password: this.password
         };
 
+        console.log('Données de connexion:', loginData);
+
         axios.post('http://localhost:3000/users/login', loginData, { withCredentials: true })
           .then(response => {
             console.log('Réponse de connexion:', response.data);
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            console.log('Jeton JWT reçu et stocké:', token); // Console de débogage
             this.isLoggedIn = true;
             this.showTaskForm = true;
             this.showTaskList = true;
@@ -106,6 +127,9 @@ export default {
     logout() {
       // Effectuer une requête au backend pour déconnecter l'utilisateur
       // Réinitialiser les données de connexion
+      console.log('Déconnexion');
+      localStorage.removeItem('token');
+      console.log('Jeton JWT supprimé'); // Console de débogage
       this.isLoggedIn = false;
       this.isRegistering = false;
       this.username = '';
