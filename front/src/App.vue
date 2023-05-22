@@ -15,6 +15,7 @@
         </div>
         <button type="submit">{{ isRegistering ? 'S\'inscrire' : 'Se connecter' }}</button>
       </form>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
       <button @click="toggleFormMode">{{ isRegistering ? 'Déjà inscrit ? Se connecter' : 'Pas encore inscrit ? S\'inscrire' }}</button>
     </div>
 
@@ -53,7 +54,8 @@ export default {
       showTaskForm: false,
       showTaskList: false,
       showAssignTasks: false,
-      showAssignedTasksList: false
+      showAssignedTasksList: false,
+      errorMessage: '' // Ajout de la propriété errorMessage
     };
   },
   created() {
@@ -91,7 +93,7 @@ export default {
           })
           .catch(error => {
             console.error('Erreur d\'inscription:', error);
-            // Gérer les erreurs d'inscription
+            this.errorMessage = error.response.data.error; // Affichage du message d'erreur renvoyé par le backend
           });
       } else {
         const loginData = {
@@ -115,7 +117,7 @@ export default {
           })
           .catch(error => {
             console.error('Erreur de connexion:', error);
-            // Gérer les erreurs de connexion
+            this.errorMessage = error.response.data.error; // Affichage du message d'erreur renvoyé par le backend
           });
       }
     },
@@ -123,6 +125,7 @@ export default {
       this.isRegistering = !this.isRegistering;
       this.username = '';
       this.password = '';
+      this.errorMessage = ''; // Réinitialisation du message d'erreur lors du changement de mode
     },
     logout() {
       // Effectuer une requête au backend pour déconnecter l'utilisateur
@@ -154,5 +157,8 @@ export default {
 }
 .img {
   width: 300px;
+}
+.error-message {
+  color: red;
 }
 </style>

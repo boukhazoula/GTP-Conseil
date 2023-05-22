@@ -5,15 +5,15 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   username: {
     type: String,
-    required: true,
-    unique: true,
-    minlength: 5,
-    maxlength: 20
+    required: [true, 'Le nom d\'utilisateur est requis.'],
+    unique: [true, 'Le nom d\'utilisateur doit être unique.'],
+    minlength: [5, 'Le nom d\'utilisateur doit contenir au moins 5 caractères.'],
+    maxlength: [20, 'Le nom d\'utilisateur ne peut pas dépasser 20 caractères.']
   },
   password: {
     type: String,
-    required: true,
-    minlength: 8
+    required: [true, 'Le mot de passe est requis.'],
+    minlength: [8, 'Le mot de passe doit contenir au moins 8 caractères.']
   }
 });
 
