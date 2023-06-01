@@ -7,13 +7,24 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Le nom d\'utilisateur est requis.'],
     unique: [true, 'Le nom d\'utilisateur doit être unique.'],
-    minlength: [5, 'Le nom d\'utilisateur doit contenir au moins 5 caractères.'],
+    minlength: [3, 'Le nom d\'utilisateur doit contenir au moins 3 caractères.'],
     maxlength: [20, 'Le nom d\'utilisateur ne peut pas dépasser 20 caractères.']
   },
   password: {
     type: String,
     required: [true, 'Le mot de passe est requis.'],
-    minlength: [8, 'Le mot de passe doit contenir au moins 8 caractères.']
+    validate: {
+      validator: function(value) {
+        // Utiliser une expression régulière pour valider le mot de passe
+        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value);
+      },
+      message: 'Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre.'
+    }
+  },
+  email: {
+    type: String,
+    required: [true, 'L\'adresse e-mail est requise.'],
+    unique: [true, 'L\'adresse e-mail doit être unique.']
   }
 });
 

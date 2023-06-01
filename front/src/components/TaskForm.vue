@@ -1,23 +1,20 @@
 <template>
-  <div>
+  <div class="task-form">
     <h2>Créer une tâche</h2>
-
-    <div>
-      <label for="taskLabel">Libellé</label>
-      <input id="taskLabel" v-model="label" placeholder="Libellé de la tâche" required>
-    </div>
-
-    <div>
-      <label for="startTime">Heure de début</label>
-      <input id="startTime" v-model="start_time" type="time" required>
-    </div>
-
-    <div>
-      <label for="endTime">Heure de fin</label>
-      <input id="endTime" v-model="end_time" type="time" required>
-    </div>
-
-    <button @click="createTask">Créer la tâche</button>
+    <table>
+      <tr>
+        <th><label for="taskLabel" class="label">Libellé</label></th>
+        <th><label for="startTime" class="label">Heure de début</label></th>
+        <th><label for="endTime" class="label">Heure de fin</label></th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td><input id="taskLabel" v-model="label" placeholder="Libellé de la tâche" required class="input-label"></td>
+        <td><input id="startTime" v-model="start_time" type="time" required class="input-label"></td>
+        <td><input id="endTime" v-model="end_time" type="time" required class="input-label"></td>
+        <td><button @click="createTask">Créer la tâche</button></td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -73,3 +70,71 @@ export default {
   },
 };
 </script>
+<style scoped>
+.task-form {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+}
+
+.task-form h2 {
+  color: #4CAF50;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+label.label {
+  font-weight: bold;
+}
+
+input.input-label,
+input.input-label[type="time"] {
+  outline: none;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+input.input-label:focus {
+  border-color: #4CAF50;
+}
+</style>

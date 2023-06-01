@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="assign-tasks">
     <h2>Affecter des tâches aux employés</h2>
 
-    <div>
+    <div class="select-container">
       <label for="task">Tâche</label>
       <select id="task" v-model="selectedTask" required>
         <option disabled value="">Veuillez sélectionner une tâche</option>
@@ -12,7 +12,7 @@
       </select>
     </div>
 
-    <div>
+    <div class="select-container">
       <label for="employee">Assigner à l'employé</label>
       <select id="employee" v-model="selectedEmployee" required>
         <option disabled value="">Veuillez sélectionner un employé</option>
@@ -21,22 +21,19 @@
         </option>
       </select>
     </div>
-
-    <button @click="confirmAssignTask">Assigner la tâche</button>
-
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-
-    <div>
+    <button @click="confirmAssignTask">Assigner la tâche</button> 
+    <div class="create-employee">
       <h2>Créer un nouvel employé</h2>
 
-      <div>
+      <div class="input-container">
         <input v-model="newEmployeeName" placeholder="Nom de l'employé" required>
         <button @click="createEmployee">Créer</button>
       </div>
     </div>
+
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -133,3 +130,58 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.assign-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.assign-tasks h2 {
+  color: #4CAF50;
+}
+
+.select-container, .input-container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+select, input {
+  width: 80%; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.error-message {
+  color: red;
+}
+</style>

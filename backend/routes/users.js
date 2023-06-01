@@ -6,7 +6,7 @@ const User = require('../models/User');
 
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Vérifier si l'utilisateur existe déjà
     const user = await User.findOne({ username });
@@ -20,6 +20,7 @@ router.post('/register', async (req, res) => {
 
     const newUser = new User({
       username,
+      email,
       password: hashedPassword
     });
 
@@ -37,18 +38,18 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     // Vérifier si l'utilisateur existe
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
+      return res.status(400).json({ error: 'Adresse e-mail ou mot de passe incorrect.' });
     }
 
     // Vérifier le mot de passe
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect.' });
+      return res.status(400).json({ error: 'Adresse e-mail ou mot de passe incorrect.' });
     }
 
     // Générer le token JWT
